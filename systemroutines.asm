@@ -2,7 +2,6 @@
 ;* 8085 System Routines                                         *
 ;* Description: A collection of system routines for debugging,  *
 ;*communication, and data handling of an 8085 system            *
-;* Authors: Kyle Jiang and Greg Hassman                         *
 ;* Date: January 1, 2018                                        *
 ;****************************************************************
 

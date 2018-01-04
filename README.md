@@ -44,5 +44,53 @@ operation are:
 4. 110: NACKError (slave did not understand or was unable to process the data)
 
 ## Creating Extensions
-Creating extensions on top of BB85 is extremely easy (provided you know at least the fundamentals of assembly for the Intel processors. As
-an example, let us create a function that writes a byte of data to 
+Creating extensions on top of BB85 is extremely easy (provided you know at least the fundamentals of assembly for the Intel processors).
+As an example, let us create a function that writes a byte of data to an address of the 24AA64 64-KBit EEPROM.
+
+```
+  LXI H, 1000H
+  PUSH H
+  MVI A, 0C3H
+  PUSH PSW
+  CALL i2c2464BW
+...
+;write a byte of data to the 24AA64 EEPROM
+;inputs: 2-byte address, byte to write (total 3 bytes on stack)
+;output: none
+;returns: none
+i2c2464BW:
+    PUSH H
+    PUSH PSW
+    PUSH D
+    CALL i2cStart
+    LXI H, 0008H
+    DAD SP
+    MOV A, M        ;send high-order address byte
+    PUSH PSW
+    CALL i2cSendByte
+    POP PSW
+    LXI D, state    ;check if everything was ok
+    LDAX D
+    RAL             ;to reveal error bit
+    JC i2c2464BW2   ;failed!
+    INX H
+    MOV A, M        ;send low-order address byte
+    PUSH PSW
+    CALL i2cSendByte
+    POP PSW
+    LDAX D          ;check for errors
+    RAL
+    JC i2c2464BW2
+    DCX H
+    DCX H
+    DCX H
+    MOV A, M        ;send data byte
+    PUSH PSW
+    CALL i2cSendByte
+    POP PSW
+i2c2464BW2:         ;exit
+    POP D
+    POP PSW
+    POP H
+    RET
+```

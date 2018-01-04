@@ -17,7 +17,6 @@ ledctrlport EQU 01H
 
 stddelay EQU 02H	;call delay with this to delay 51us
 wdtimeout EQU 8000H	;cycles before timeout (clock stretching)
-;###
 
 ; SECTION 2: Data Definitions
 ; Values and labels to be loaded into memory.
@@ -29,15 +28,16 @@ state:
 	.DB 00H			;bits 2 and 3 are CLK and DATA
 started:
 	.DB 00H			;whether or not com has already begun
-;###
 
 ; SECTION 3: Programs
+
 .ORG rombase
 	;initialization
 	LXI SP, stkbase
 	;(program code here)
 	HLT
 
+.ORG 7000H
 ;general-purpose delay
 ;input: loops (1 byte on stack)
 ;output: none

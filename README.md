@@ -32,7 +32,7 @@ All of the included functions, upon reaching an error in communication, will imm
 4. 110: NACKError (slave did not understand or was unable to process the data)
 
 ## Creating Extensions
-Creating extensions on top of BB85 is extremely easy (provided you know at least the fundamentals of assembly for the Intel processors). As an example, let us create a function that writes a byte of data to an address of the (24AA64 64-KBit EEPROM)[http://ww1.microchip.com/downloads/en/DeviceDoc/21189f.pdf].
+Creating extensions on top of BB85 is extremely easy (provided you know at least the fundamentals of assembly for the Intel processors). As an example, let us create a function that writes a byte of data to an address of the [24AA64 64-KBit EEPROM](http://ww1.microchip.com/downloads/en/DeviceDoc/21189f.pdf).
 
 ```assembly
   MVI A, 0C3H       ;data
@@ -108,3 +108,7 @@ i2c2464BW2:         ;exit
 Notice that code between the breaks are extremely similar. They generally set the memory address of the parameter (here placed on the stack), place it into a register, do some processing, PUSH the register, and call a BB85 procedure. Finally, STATE is checked after each transmission action, and if an error is encountered, the communication is halted (for more precise behavior, error handling based on STATE can be implemented).
 
 So why did I not create higher-level procedures to wrap the byte level? There really wasn't justification for all the added complexity. Each slave device has its own I2C requirements; beyond some general start plus 8-byte address plus 8-byte data devices, it would be impossible to write all of them. In any case, we observe that implemented code would not particulaly benefit from procedures of higher layers; as BB85's I2C has already been sufficiently abstracted.
+
+## References and ACKnowledgements :)
+1. [Understanding the I2C Bus](http://www.ti.com/lit/an/slva704/slva704.pdf) (Texas Instruments)
+2. [8080 / 8085 Assembly Language Programming](https://www.tramm.li/i8080/Intel%208080- 8085%20Assembly%20Language%20Programming%201977%20Intel.pdf) (Intel)

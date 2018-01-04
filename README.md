@@ -5,7 +5,7 @@ Written by Siyu Jiang
 ## General Information and Hardware
 The BB85 (Bit-Banged '85) is a ready-to-use program template to implement I2C with the Intel 8085. If used as configured, input port 00H must be equipped with a buffer; connect bit 2 to SCL (pulled-up via resistor to 5V) and bit 3 to SDA (also pulled-up to 5V). In addition, output port 01H should also be equipped with a buffer; buffer bit 2 should be fed into the gate of a transistor with emitter tied to 0V and collector connected to SCL, while buffer bit 3 fed into the gate of another transistor with emitter also tied to 0V and collector connected to SDA. Otherwise, the desired ports to be modified in Section 1 are INPUTPORT (input) and LEDCTRLPORT (output). However, it is best to stick with bits 2 and 3 associated with SCL and SDA, respectively. Notice that for output using a non-inverting buffer, pulling a line low means setting the corresponding bit, which may cause some confusion. The code is implemented assuming all non-inverting buffers.
 
-The described layout is provided below. The data lines (D0 - D7) are the demultiplexed AD0 - AD7 from the 8085. IO01 and IO02 are signals that represent activated I/O ports 00H and 01H, respectively.
+The described layout is provided below. The data lines (D0 - D7) are the demultiplexed AD0 - AD7 from the 8085. IO00 and IO01 are signals that represent activated I/O ports 00H and 01H, respectively.
 
 <img width="913" alt="screenshot 2018-01-03 22 59 58" src="https://user-images.githubusercontent.com/25142270/34550922-7fd3eb20-f0da-11e7-8a59-e44e789ddfba.png">
 

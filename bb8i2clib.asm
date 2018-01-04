@@ -510,3 +510,39 @@ i2cReadByte2:
 	POP B
 	POP H
 	JMP i2cActionOkay
+
+;sends a byte stream to the I2C bus
+;input: size (1 byte), byte stream (consecutive)
+;output: none
+;returns: none
+;size: 44 bytes
+i2cSendByteStream:
+	PUSH D			;save registers
+	PUSH H
+	PUSH B
+	PUSH PSW
+	LXI D, status
+	CALL i2cStart
+	LDAX D
+	RAL
+	JC done			;error
+	LXI H, 000BH
+	DAD SP
+	MOV C, M
+i2cSendByteStream1:
+	INX H
+	MOV A, M
+	PUSH PSW
+	CALL i2cSendByte
+	POP PSW
+	LDAX D
+	RAL
+	JC done			;error
+	DCR C
+	JNZ i2cSendByteStream1
+i2cSendByteStream2:
+	POP PSW
+	POP B
+	POP H
+	POP D
+	RET

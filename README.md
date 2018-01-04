@@ -48,31 +48,40 @@ Creating extensions on top of BB85 is extremely easy (provided you know at least
 As an example, let us create a function that writes a byte of data to an address of the 24AA64 64-KBit EEPROM.
 
 ```
-  LXI H, 1000H
+  MVI A, 0C3H       ;data
+  PUSH PSW
+  LXI H, 1000H      ;address
   PUSH H
-  MVI A, 0C3H
+  MVI A, 00000101B  ;device address (configured via hardware)
   PUSH PSW
   CALL i2c2464BW
 ...
 ;write a byte of data to the 24AA64 EEPROM
-;inputs: 2-byte address, byte to write (total 3 bytes on stack)
+;inputs: data, address, device address bits (lower 3) (total 4 bytes on stack)
 ;output: none
 ;returns: none
 i2c2464BW:
     PUSH H
     PUSH PSW
     PUSH D
-    CALL i2cStart
-    LXI H, 0008H
+    LXI H, 0009H
     DAD SP
+    LXI D, state    ;for error checking
+;********************************
+    CALL i2cStart   ;start transmission
+    LDAX D
+    RAL
+    JC i2c2464BW2
+;********************************
     MOV A, M        ;send high-order address byte
+    RLC             ;bit[0] = 0 (write), and bit[3:1] are device address
     PUSH PSW
     CALL i2cSendByte
     POP PSW
-    LXI D, state    ;check if everything was ok
     LDAX D
     RAL             ;to reveal error bit
     JC i2c2464BW2   ;failed!
+;********************************
     INX H
     MOV A, M        ;send low-order address byte
     PUSH PSW
@@ -81,13 +90,27 @@ i2c2464BW:
     LDAX D          ;check for errors
     RAL
     JC i2c2464BW2
-    DCX H
-    DCX H
-    DCX H
+;********************************
+    INX H
+    MOV A, M        ;send low-order address byte
+    PUSH PSW
+    CALL i2cSendByte
+    POP PSW
+    LDAX D          ;check for errors
+    RAL
+    JC i2c2464BW2
+;********************************
+    INX H
+    INX H
     MOV A, M        ;send data byte
     PUSH PSW
     CALL i2cSendByte
     POP PSW
+    LDAX D
+    RAL
+    JC i2c2464BW2
+;********************************
+    CALL i2cStop    ;no error checking needed since this is last step
 i2c2464BW2:         ;exit
     POP D
     POP PSW

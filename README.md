@@ -107,7 +107,7 @@ i2c2464BW2:         ;exit
 
 Notice that code between the breaks are extremely similar. They generally set the memory address of the parameter (here placed on the stack), place it into a register, do some processing, PUSH the register, and call a BB85 procedure. Finally, STATE is checked after each transmission action, and if an error is encountered, the communication is halted (for more precise behavior, error handling based on STATE can be implemented).
 
-So why did I not create higher-level procedures to wrap the byte level? There really wasn't justification for all the added complexity. Each slave device has its own I2C requirements; beyond some general start plus 8-byte address plus 8-byte data devices, it would be impossible to write all of them. In any case, we observe that implemented code would not particulaly benefit from procedures of higher layers; as BB85's I2C has already been sufficiently abstracted.
+So why did I not create higher-level procedures to wrap the byte level? There really wasn't justification for all the added complexity. Each slave device has its own I2C requirements; beyond some general start plus 8-byte address plus 8-byte data devices, it would be impossible to write all of them. In any case, we observe that implemented code does not particularly benefit from procedures of higher layers; as BB85's I2C has already been sufficiently abstracted.
 
 ## References and ACKnowledgements :)
 1. [Understanding the I2C Bus](http://www.ti.com/lit/an/slva704/slva704.pdf) (Texas Instruments)

@@ -2,20 +2,10 @@
 Complete Intel 8085 I2C library (bit-banged)
 
 ## General Information and Hardware
-The BB85 (Bit-Banged '85) is a ready-to-use program template to implement I2C with the Intel 8085. If used as configured, input port 00H
-must be equipped with a buffer; connect bit 2 to SCL (pulled-up via resistor to 5V) and bit 3 to SDA (also pulled-up to 5V). In addition,
-output port 01H should also be equipped with a buffer; buffer bit 2 should be fed into the gate of a transistor with emitter tied to 0V and
-collector connected to SCL, while buffer bit 3 fed into the gate of another transistor with emitter also tied to 0V and collector connected
-to SDA. Otherwise, the desired ports to be modified in Section 1 are INPUTPORT (input) and LEDCTRLPORT (output). However, it is best to
-stick with bits 2 and 3 associated with SCL and SDA, respectively. Notice that for output using a non-inverting buffer, pulling a line low
-means setting the corresponding bit, which may cause some confusion. The code is implemented assuming all non-inverting buffers.
+The BB85 (Bit-Banged '85) is a ready-to-use program template to implement I2C with the Intel 8085. If used as configured, input port 00H must be equipped with a buffer; connect bit 2 to SCL (pulled-up via resistor to 5V) and bit 3 to SDA (also pulled-up to 5V). In addition, output port 01H should also be equipped with a buffer; buffer bit 2 should be fed into the gate of a transistor with emitter tied to 0V and collector connected to SCL, while buffer bit 3 fed into the gate of another transistor with emitter also tied to 0V and collector connected to SDA. Otherwise, the desired ports to be modified in Section 1 are INPUTPORT (input) and LEDCTRLPORT (output). However, it is best to stick with bits 2 and 3 associated with SCL and SDA, respectively. Notice that for output using a non-inverting buffer, pulling a line low means setting the corresponding bit, which may cause some confusion. The code is implemented assuming all non-inverting buffers.
 
 ## How to Use the Library
-BB85 contains full functionality for the Intel 8085 to serve as an I2C master. No slave functionality is included. Full consideration has
-been given to features such as loss of arbitration in multi-master implmentations, slave clock stretching, and restarts. Simply CALL a
-desired function, placing appropriate arguments (if required) onto the stack or in the CY flag. All pertinent information can be found in
-the library. The library only supports operations at the sub-bit, bit and byte layers, so higher-level functionality has to be implemented
-by creating [your own extensions](#creating-extensions).
+BB85 contains full functionality for the Intel 8085 to serve as an I2C master. No slave functionality is included. Full consideration has been given to features such as loss of arbitration in multi-master implmentations, slave clock stretching, and restarts. Simply CALL a desired function, placing appropriate arguments (if required) onto the stack or in the CY flag. All pertinent information can be found in the library. The library only supports operations at the sub-bit, bit and byte layers, so higher-level functionality has to be implemented by creating [your own extensions](#creating-extensions).
 
 ### Functions at the Sub-Bit Level
 1. Set / Clear SCL (): i2cSetSCL / i2cClearSCL
@@ -34,9 +24,7 @@ by creating [your own extensions](#creating-extensions).
 10. Read Byte (): i2cReadByte
 
 ## Error Handling
-All of the included functions, upon reaching an error in communication, will immediately quit the communication, set the most significant
-bit of the STATE global variable, and write an error code to bits 6 and 5 of STATE. The possible combinations of STATE[7:5] after an
-operation are:
+All of the included functions, upon reaching an error in communication, will immediately quit the communication, set the most significant bit of the STATE global variable, and write an error code to bits 6 and 5 of STATE. The possible combinations of STATE[7:5] after an operation are:
 
 1. 000: OK (action was successful)
 2. 100: TimeoutError (waited too long for slave to let go of SCL)
@@ -44,10 +32,9 @@ operation are:
 4. 110: NACKError (slave did not understand or was unable to process the data)
 
 ## Creating Extensions
-Creating extensions on top of BB85 is extremely easy (provided you know at least the fundamentals of assembly for the Intel processors).
-As an example, let us create a function that writes a byte of data to an address of the 24AA64 64-KBit EEPROM.
+Creating extensions on top of BB85 is extremely easy (provided you know at least the fundamentals of assembly for the Intel processors). As an example, let us create a function that writes a byte of data to an address of the (24AA64 64-KBit EEPROM)[http://ww1.microchip.com/downloads/en/DeviceDoc/21189f.pdf].
 
-```
+```assembly
   MVI A, 0C3H       ;data
   PUSH PSW
   LXI H, 1000H      ;address
@@ -117,3 +104,7 @@ i2c2464BW2:         ;exit
     POP H
     RET
 ```
+
+Notice that code between the breaks are extremely similar. They generally set the memory address of the parameter (here placed on the stack), place it into a register, do some processing, PUSH the register, and call a BB85 procedure. Finally, STATE is checked after each transmission action, and if an error is encountered, the communication is halted (for more precise behavior, error handling based on STATE can be implemented).
+
+So why did I not create higher-level procedures to wrap the byte level? There really wasn't justification for all the added complexity. Each slave device has its own I2C requirements; beyond some general start plus 8-byte address plus 8-byte data devices, it would be impossible to write all of them. In any case, we observe that implemented code would not particulaly benefit from procedures of higher layers; as BB85's I2C has already been sufficiently abstracted.

@@ -110,5 +110,6 @@ Notice that code between the breaks are extremely similar. They generally set th
 So why did I not create higher-level procedures to wrap the byte level? There really wasn't justification for all the added complexity. Each slave device has its own I2C requirements; beyond some general start plus 8-byte address plus 8-byte data devices, it would be impossible to write all of them. In any case, we observe that implemented code does not particularly benefit from procedures of higher layers; as BB85's I2C has already been sufficiently abstracted.
 
 ## References and ACKnowledgements :)
-1. [Understanding the I2C Bus](http://www.ti.com/lit/an/slva704/slva704.pdf) (Texas Instruments)
-2. [8080 / 8085 Assembly Language Programming](https://www.tramm.li/i8080/Intel%208080-8085%20Assembly%20Language%20Programming%201977%20Intel.pdf) (Intel)
+1. Mr. Hassman, who has spent countless hours teaching the wonders of the electronic world with me.
+2. [Understanding the I2C Bus](http://www.ti.com/lit/an/slva704/slva704.pdf) (Texas Instruments)
+3. [8080 / 8085 Assembly Language Programming](https://www.tramm.li/i8080/Intel%208080-8085%20Assembly%20Language%20Programming%201977%20Intel.pdf) (Intel)

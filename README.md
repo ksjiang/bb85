@@ -111,4 +111,4 @@ So why did I not create higher-level procedures to wrap the byte level? There re
 
 ## References and ACKnowledgements :)
 1. [Understanding the I2C Bus](http://www.ti.com/lit/an/slva704/slva704.pdf) (Texas Instruments)
-2. [8080 / 8085 Assembly Language Programming](https://www.tramm.li/i8080/Intel%208080- 8085%20Assembly%20Language%20Programming%201977%20Intel.pdf) (Intel)
+2. [8080 / 8085 Assembly Language Programming](https://www.tramm.li/i8080/Intel%208080-8085%20Assembly%20Language%20Programming%201977%20Intel.pdf) (Intel)

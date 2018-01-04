@@ -540,6 +540,7 @@ i2cSendByteStream1:
 	JC done			;error
 	DCR C
 	JNZ i2cSendByteStream1
+	CALL i2cStop
 i2cSendByteStream2:
 	POP PSW
 	POP B

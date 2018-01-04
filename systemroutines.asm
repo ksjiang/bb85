@@ -1,7 +1,7 @@
 ;****************************************************************
-;* 8085 System Routines                                         *
-;* Description: A collection of system routines for debugging,  *
-;*communication, and data handling of an 8085 system            *
+;* 8085 I2C Library                                             *
+;* Description: A collection of system routines for I2C master  *
+;communication                                                  *
 ;* Date: January 1, 2018                                        *
 ;****************************************************************
 
@@ -10,32 +10,17 @@
 
 rombase EQU 0000H
 rambase EQU 8000H
-testin EQU 8002H
 stkbase EQU 83FFH	;bottom of stack @ top of RAM
 
 inputport EQU 00H
 ledctrlport EQU 01H
-leddataport EQU 02H
-
-ssnone EQU 00H		;neither seven-segment on
-ss1only EQU 01H
-ss2only EQU 02H
-ssboth EQU 03H
 
 stddelay EQU 02H	;call delay with this to delay 51us
 wdtimeout EQU 8000H	;cycles before timeout (clock stretching)
-;wdtimeout EQU 0010H
 ;###
 
 ; SECTION 2: Data Definitions
 ; Values and labels to be loaded into memory.
-
-.ORG 7000H
-;hexadecimal digit display table
-;size: 16 bytes
-hexdt:
-	.DB 3FH, 06H, 5BH, 4FH, 66H, 6DH, 7DH, 07H
-	.DB 7FH, 6FH, 77H, 7CH, 39H, 5EH, 79H, 71H	;can't people just agree on how to display 9s?
 
 .ORG rambase
 ;I2C global variables
@@ -51,33 +36,7 @@ started:
 	;initialization
 	LXI SP, stkbase
 	;(program code here)
-	LXI B, 0ABCDH		;just to see if procedures preserve regs
-	LXI D, 369CH
-	LXI H, 1234H
-	CALL i2cStart
-	STC
-	CALL i2cReadByte
-	CALL i2cStop
 	HLT
-
-.ORG 5000H
-;raw-displays a byte in memory on SS1
-;input: char (1 byte on stack)
-;output: raw image on SS1
-;returns: none
-;size: 16 bytes
-dispbyte:
-	PUSH H			;save regs
-	PUSH PSW
-	LXI H, 0007H	;get byte from stack
-	DAD SP
-	MOV A, M
-	OUT leddataport
-	MVI A, ss1only
-	OUT ledctrlport	;only display on SS1
-	POP PSW			;restore regs
-	POP H
-	RET
 
 ;general-purpose delay
 ;input: loops (1 byte on stack)
@@ -173,7 +132,6 @@ i2cSetSDA:
 i2cReadSCL:
 	PUSH PSW
 	IN inputport
-;	LDA testin		;###
 	RAR
 	RAR
 	RAR
@@ -195,7 +153,6 @@ i2cReadSCL1:
 i2cReadSDA:
 	PUSH PSW
 	IN inputport
-;	LDA testin		;###
 	RAR
 	RAR
 	RAR

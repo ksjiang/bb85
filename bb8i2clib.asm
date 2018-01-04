@@ -521,11 +521,11 @@ i2cSendByteStream:
 	PUSH H
 	PUSH B
 	PUSH PSW
-	LXI D, status
+	LXI D, state
 	CALL i2cStart
 	LDAX D
 	RAL
-	JC done			;error
+	JC i2cSendByteStream2	;error
 	LXI H, 000BH
 	DAD SP
 	MOV C, M
@@ -537,7 +537,7 @@ i2cSendByteStream1:
 	POP PSW
 	LDAX D
 	RAL
-	JC done			;error
+	JC i2cSendByteStream2	;error
 	DCR C
 	JNZ i2cSendByteStream1
 	CALL i2cStop

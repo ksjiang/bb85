@@ -512,7 +512,7 @@ i2cReadByte2:
 	JMP i2cActionOkay
 
 ;sends a byte stream to the I2C bus
-;input: size (1 byte), byte stream (consecutive), whether to stop (CY flag)
+;input: size (1 byte), byte stream (consecutive, little-endian)
 ;output: none
 ;returns: none
 ;size: ### bytes
@@ -522,10 +522,6 @@ i2cSendByteStream:
 	PUSH B
 	PUSH PSW
 	LXI D, state
-	CALL i2cStart
-	LDAX D
-	RAL
-	JC i2cSendByteStream2	;error
 	LXI H, 000BH
 	DAD SP
 	MOV C, M
@@ -540,10 +536,6 @@ i2cSendByteStream1:
 	JC i2cSendByteStream2	;error
 	DCR C
 	JNZ i2cSendByteStream1
-	POP PSW			;get CY
-	PUSH PSW		;then save again
-	JNC i2cSendByteStream2
-	CALL i2cStop
 i2cSendByteStream2:
 	POP PSW
 	POP B

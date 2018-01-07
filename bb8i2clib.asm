@@ -473,7 +473,7 @@ i2cSendByte3:
 ;reads a byte from the I2C bus
 ;input: ACK bit via CY flag
 ;output: none
-;returns: accumulator with 8-bit data
+;returns: 8-bit data (accumulator)
 ;size: ### bytes
 i2cReadByte:
 	PUSH H

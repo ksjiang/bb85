@@ -48,7 +48,7 @@ First create the header:
 
 ```assembly
 ;reads a byte of data from the 24AA64 EEPROM (1010XXXR)
-;input: data read address (1 byte on the stack), data store address (1 byte on the stack), EEPROM hardwired address (1 byte on the stack)
+;input: data read address (1 byte on the stack), data store address (1 byte on the stack), EEPROM hardwired address (last 3 bits of 1 byte on the stack)
 ;output: none
 ;returns: whether operation was successful (accumulator)
 ;size: ### bytes
@@ -56,13 +56,17 @@ First create the header:
 
 We first save the registers we will be using (usually the last step, after the procedure has been written).
 ```assembly
-
+EEPROMwrite:
+  PUSH H
+  PUSH D
+  PUSH PSW
 ```
 
-Next, we set up HL as a secondary stack pointer, pointing to our first argument (.
+Next, we set up HL as a secondary stack pointer, pointing to our first argument (the EEPROM hardwired address).
 
 ```assembly
-  
+  LXI H, 0009H
+  DAD SP
 ```
 
 We begin communication by sending a Start condition and checking for errors.
@@ -74,8 +78,12 @@ We begin communication by sending a Start condition and checking for errors.
   RAL
   JNC EEPROMrread1
   ;(error handling here)
-  MVI B, 10000000B  ;errorcode for failed at Start
-  
+  MVI E, 10000000B  ;errorcode for failed at Start
+  POP PSW
+  MOV A, E
+  POP D
+  POP H
+  RET
 ```
 
 Now we form the I2C address of the slave and send that.

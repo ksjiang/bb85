@@ -568,10 +568,11 @@ i2cReadByteStream:
 	LXI D, state
 i2cReadByteStream1:
 	CALL i2cReadByte
+	MOV B, A		;save received data before error check
 	LDAX D
 	RAL
 	JC i2cReadByteStream2	;error
-	MOV M, A
+	MOV M, B
 	INX H
 	DCR C
 	JNZ i2cReadByteStream1

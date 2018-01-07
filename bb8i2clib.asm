@@ -8,7 +8,6 @@
 
 ; SECTION 1: Constant Definitions
 ; These are specific to the implemented memory and I/O.
-
 rombase EQU 0000H
 rambase EQU 8000H
 stkbase EQU 83FFH		;bottom of stack @ top of RAM
@@ -21,17 +20,13 @@ wdtimeout EQU 8000H		;cycles before timeout (clock stretching)
 
 ; SECTION 2: Data Definitions
 ; Values and labels to be loaded into memory.
-
 .ORG rambase
-;I2C global variables
-;size: 2 bytes
 state:
 	.DB 00H			;bits 2 and 3 are CLK and DATA
 started:
 	.DB 00H			;whether or not com has already begun
 
 ; SECTION 3: Programs
-
 .ORG rombase
 	LXI SP, stkbase		;initialization
 	;(program code here)
@@ -567,16 +562,22 @@ i2cReadByteStream:
 	XCHG
 	LXI D, state
 i2cReadByteStream1:
+	STC			;send ACK
+	DCR C
+	JNZ i2cReadByteStream2
 	CALL i2cReadByte
 	MOV B, A		;save received data before error check
 	LDAX D
 	RAL
-	JC i2cReadByteStream2	;error
+	JC i2cReadByteStream3	;error
 	MOV M, B
 	INX H
-	DCR C
 	JNZ i2cReadByteStream1
 i2cReadByteStream2:
+	CMC			;don't send ACK
+	CALL i2cReadByte
+	MOV M, A		;don't need to error check (last op)
+i2cReadByteStream3:
 	POP PSW
 	POP D
 	POP B

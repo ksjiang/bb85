@@ -48,7 +48,7 @@ First create the header:
 
 ```assembly
 ;reads a byte of data from the 24AA64 EEPROM (1010XXXR)
-;input: data store address (1 byte on the stack), data read address (1 byte on the stack), EEPROM hardwired address (1 byte on the stack)
+;input: data read address (1 byte on the stack), EEPROM hardwired address (1 byte on the stack), data store address (1 byte on the stack)
 ;output: none
 ;returns: whether operation was successful (accumulator)
 ;size: ### bytes

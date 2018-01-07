@@ -29,6 +29,10 @@ BB85 contains full functionality for the Intel 8085 to serve as an I2C master. N
 9. Send Byte (byte): i2cSendByte
 10. Read Byte (): i2cReadByte
 
+### Functions at the Bytestream Level
+11. Send Byte Stream (argc, byte1, byte2, ...): i2cSendByteStream
+12. Read Byte Stream (argc, \*argv): i2cReadByteStream
+
 ## Error Handling
 All of the included functions, upon reaching an error in communication, will immediately quit the communication, set the most significant bit of the STATE global variable, and write an error code to bits 6 and 5 of STATE. The possible combinations of STATE[7:5] after an operation are:
 
@@ -41,79 +45,8 @@ All of the included functions, upon reaching an error in communication, will imm
 Creating extensions on top of BB85 is extremely easy (provided you know at least the fundamentals of assembly for the Intel processors). As an example, let us create a function that writes a byte of data to an address of the [24AA64 64-KBit EEPROM](http://ww1.microchip.com/downloads/en/DeviceDoc/21189f.pdf).
 
 ```assembly
-  MVI A, 0C3H       ;data
-  PUSH PSW
-  LXI H, 1000H      ;address
-  PUSH H
-  MVI A, 00000101B  ;device address (configured via hardware)
-  PUSH PSW
-  CALL i2c2464BW
-...
-;write a byte of data to the 24AA64 EEPROM
-;inputs: data, address, device address bits (lower 3) (total 4 bytes on stack)
-;output: none
-;returns: none
-i2c2464BW:
-    PUSH H
-    PUSH PSW
-    PUSH D
-    LXI H, 0009H
-    DAD SP
-    LXI D, state    ;for error checking
-;********************************
-    CALL i2cStart   ;start transmission
-    LDAX D
-    RAL
-    JC i2c2464BW2
-;********************************
-    MOV A, M        ;send high-order address byte
-    RLC             ;bit[0] = 0 (write), and bit[3:1] are device address
-    PUSH PSW
-    CALL i2cSendByte
-    POP PSW
-    LDAX D
-    RAL             ;to reveal error bit
-    JC i2c2464BW2   ;failed!
-;********************************
-    INX H
-    MOV A, M        ;send low-order address byte
-    PUSH PSW
-    CALL i2cSendByte
-    POP PSW
-    LDAX D          ;check for errors
-    RAL
-    JC i2c2464BW2
-;********************************
-    INX H
-    MOV A, M        ;send low-order address byte
-    PUSH PSW
-    CALL i2cSendByte
-    POP PSW
-    LDAX D          ;check for errors
-    RAL
-    JC i2c2464BW2
-;********************************
-    INX H
-    INX H
-    MOV A, M        ;send data byte
-    PUSH PSW
-    CALL i2cSendByte
-    POP PSW
-    LDAX D
-    RAL
-    JC i2c2464BW2
-;********************************
-    CALL i2cStop    ;no error checking needed since this is last step
-i2c2464BW2:         ;exit
-    POP D
-    POP PSW
-    POP H
-    RET
+
 ```
-
-Notice that code between the breaks are extremely similar. They generally set the memory address of the parameter (here placed on the stack), place it into a register, do some processing, PUSH the register, and call a BB85 procedure. Finally, STATE is checked after each transmission action, and if an error is encountered, the communication is halted (for more precise behavior, error handling based on STATE can be implemented).
-
-So why did I not create higher-level procedures to wrap the byte level? There really wasn't justification for all the added complexity. Each slave device has its own I2C requirements; beyond some general start plus 8-byte address plus 8-byte data devices, it would be impossible to write all of them. In any case, we observe that implemented code does not particularly benefit from procedures of higher layers; as BB85's I2C has already been sufficiently abstracted.
 
 ## References and ACKnowledgements :)
 1. Mr. Hassman for basically everything

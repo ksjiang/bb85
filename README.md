@@ -82,7 +82,7 @@ We begin communication by sending a Start condition and checking for errors:
   JMP EEPROMrread8
 ```
 
-Now we form the I2C address of the slave and send that:
+Now we form the I2C address of the slave and send that as a byte:
 
 ```assembly
 EEPROMrread1:
@@ -101,7 +101,7 @@ EEPROMrread1:
   JMP EEPROMrread8
 ```
 
-Next we send the address of the memory we want to access:
+Next we send the address of the memory we want to access as a bytestream:
 
 ```assembly
 EEPROMrread2:
@@ -121,7 +121,7 @@ EEPROMrread2:
   JMP EEPROMrread8
 ```
 
-We send a repeated start:
+We send a repeated Start:
 
 ```assembly
 EEPROMrread3:
@@ -135,7 +135,7 @@ EEPROMrread3:
   JMP EEPROMrread8
 ```
 
-Resend I2C address of slave:
+Resend I2C address of slave as a byte, this time in Read mode:
 
 ```assembly
 EEPROMrread4:
@@ -152,7 +152,7 @@ EEPROMrread4:
   JMP EEPROMrread8
 ```
 
-Then read:
+Then read the bytestream:
 
 ```assembly
 EEPROMrread5:

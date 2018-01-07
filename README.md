@@ -11,7 +11,7 @@ The described layout is provided below. The data lines (D0 - D7) are the demulti
 <img width="913" alt="screenshot 2018-01-03 22 59 58" src="https://user-images.githubusercontent.com/25142270/34550922-7fd3eb20-f0da-11e7-8a59-e44e789ddfba.png">
 
 ## How to Use the Library
-BB85 contains full functionality for the Intel 8085 to serve as an I2C master. No slave functionality is included. Full consideration has been given to features such as loss of arbitration in multi-master implmentations, slave clock stretching, and restarts. Simply CALL a desired function, placing appropriate arguments (if required) onto the stack or in the CY flag. All pertinent information can be found in the library. The library only supports operations at the sub-bit, bit and byte layers, so higher-level functionality has to be implemented by creating [your own extensions](#creating-extensions).
+BB85 contains full functionality for the Intel 8085 to serve as an I2C master. No slave functionality is included. Full consideration has been given to features such as loss of arbitration in multi-master implmentations, slave clock stretching, and restarts. Simply CALL a desired function, placing appropriate arguments (if required) onto the stack or in the CY flag. All pertinent information can be found in the library. The library supports operations at the sub-bit, bit, byte, and bytestream layers, but higher-level functionality can be implemented by creating [your own extensions](#creating-extensions).
 
 ### Functions at the Sub-Bit Level
 1. Set / Clear SCL (): i2cSetSCL / i2cClearSCL

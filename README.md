@@ -30,7 +30,7 @@ BB85 contains full functionality for the Intel 8085 to serve as an I2C master. N
 10. Read Byte (): i2cReadByte
 
 ### Functions at the Bytestream Level
-11. Send Byte Stream (argc, \*bytes): i2cSendByteStream
+11. Send Byte Stream (argc, \*bytesToSend): i2cSendByteStream
 12. Read Byte Stream (argc, \*bytesToStore): i2cReadByteStream
 
 ## Error Handling

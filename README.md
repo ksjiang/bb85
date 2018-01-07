@@ -42,13 +42,13 @@ All of the included functions, upon reaching an error in communication, will imm
 4. 110: NACKError (slave did not understand or was unable to process the data)
 
 ## Creating Extensions
-Writing extensions on top of BB85 allows for simpler interfacing with specific I2C devices, but does require some knowledge of Intel assembly programming. To create effective extensions, use i2cSendByte to send 7-bit mode slave addresses and i2cSendByteStream to send 10-bit slave addresses and device-specific addresses and data. As an example, let us create a function that reads a byte of data from a random address of the [24AA64 64-KBit EEPROM](http://ww1.microchip.com/downloads/en/DeviceDoc/21189f.pdf) and stores it somewhere in its own RAM.
+Writing extensions on top of BB85 allows for simpler interfacing with specific I2C devices, but does require some knowledge of Intel assembly programming. To create effective extensions, use i2cSendByte to send 7-bit mode slave addresses and i2cSendByteStream to send 10-bit slave addresses and device-specific addresses and data. As an example, let us create a function that sequentially reads bytes from a random address of the [24AA64 64-KBit EEPROM](http://ww1.microchip.com/downloads/en/DeviceDoc/21189f.pdf) and stores it somewhere in its own RAM.
 
 First create the header:
 
 ```assembly
 ;reads a byte of data from the 24AA64 EEPROM (1010XXXR)
-;input: data store address (1 byte on the stack), data read address (1 byte on the stack, big-endian), EEPROM hardwired address (last 3 bits of 1 byte on the stack)
+;input: data store address (1 byte on the stack), number of bytes to read (1 byte on the stack), data read address (1 byte on the stack, big-endian), EEPROM hardwired address (last 3 bits of 1 byte on the stack)
 ;output: none
 ;returns: errorcode (accumulator)
 ;size: ### bytes
@@ -157,6 +157,8 @@ Then read the bytestream:
 ```assembly
 EEPROMrread5:
   INX H
+  MOV E, M
+  PUSH D
   INX H
   MOV E, M
   INX H
@@ -201,8 +203,6 @@ EEPROMrread8:
   POP H
   RET
 ```
-
-Notice that we could have implmented EEPROMrread5 as a simple i2cReadByte, but in this situation we would have to worry about setting NACK (something that was abstracted away by i2cReadByteStream).
 
 ## References and ACKnowledgements :)
 1. Mr. Hassman - thank you for all the hardware and support.

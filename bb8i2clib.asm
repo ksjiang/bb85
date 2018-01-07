@@ -526,9 +526,9 @@ i2cSendByteStream:
 	DAD SP
 	MOV C, M
 	INX H
-	MOV D, M		;get location of byte stream
+	MOV E, M		;get location of byte stream
 	INX H
-	MOV E, M
+	MOV D, M
 	XCHG			;to HL
 	LXI D, state
 i2cSendByteStream1:
@@ -543,6 +543,41 @@ i2cSendByteStream1:
 	DCR C
 	JNZ i2cSendByteStream1
 i2cSendByteStream2:
+	POP PSW
+	POP D
+	POP B
+	POP H
+	RET
+
+;reads a byte stream from the I2C bus
+;input: size (1 byte), byte stream pointer
+;output: none
+;returns: none
+;size: ### bytes
+i2cReadByteStream:
+	PUSH H
+	PUSH B
+	PUSH D
+	PUSH PSW
+	LXI H, 000BH
+	DAD SP
+	MOV C, M
+	INX H
+	MOV E, M
+	INX H
+	MOV D, M
+	XCHG
+	LXI D, state
+i2cReadByteStream1:
+	CALL i2cReadByte
+	LDAX D
+	RAL
+	JC i2cReadByteStream2	;error
+	MOV M, A
+	INX H
+	DCR C
+	JNZ i2cReadByteStream1
+i2cReadByteStream2:
 	POP PSW
 	POP D
 	POP B

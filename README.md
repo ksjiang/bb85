@@ -56,7 +56,7 @@ First create the header:
 
 We first save the registers we will be using (usually the last step, after the procedure has been written).
 ```assembly
-EEPROMwrite:
+EEPROMrread:
   PUSH H
   PUSH D
   PUSH PSW

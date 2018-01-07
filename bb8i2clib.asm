@@ -506,7 +506,7 @@ i2cReadByte2:
 	JMP i2cActionOkay
 
 ;sends a byte stream to the I2C bus
-;input: size (1 byte on the stack), byte stream pointer
+;input: size (1 byte on the stack), byte stream pointer (1 byte on the stack)
 ;output: none
 ;returns: none
 ;size: ### bytes
@@ -543,7 +543,7 @@ i2cSendByteStream2:
 	RET
 
 ;reads a byte stream from the I2C bus
-;input: size (1 byte on the stack), byte stream pointer
+;input: size (1 byte on the stack), byte stream pointer (1 byte on the stack)
 ;output: none
 ;returns: none
 ;size: ### bytes

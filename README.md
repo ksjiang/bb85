@@ -79,11 +79,7 @@ We begin communication by sending a Start condition and checking for errors:
   JNC EEPROMrread1
   ;(error handling here)
   MVI E, 10000000B  ;errorcode for failed at Start
-  POP PSW
-  MOV A, E
-  POP D
-  POP H
-  RET
+  JMP EEPROMrread8
 ```
 
 Now we form the I2C address of the slave and send that:
@@ -102,11 +98,7 @@ EEPROMrread1:
   ;(error handling here)
   MVI E, 10000001B  ;errorcode for failed at address send
   POP PSW
-  POP PSW
-  MOV A, E
-  POP D
-  POP H
-  RET
+  JMP EEPROMrread8
 ```
 
 Next we send the address of the memory we want to access:
@@ -126,11 +118,7 @@ EEPROMrread2:
   ;(error handling here)
   MVI E, 10000010B  ;errorcode for failed at memory address send
   POP PSW
-  POP PSW
-  MOV A, E
-  POP D
-  POP H
-  RET
+  JMP EEPROMrread8
 ```
 
 We send a repeated start:
@@ -144,11 +132,7 @@ EEPROMrread3:
   ;(error handling here)
   MVI E, 10000011B  ;errorcode for failed at repeated Start
   POP PSW
-  POP PSW
-  MOV A, E
-  POP D
-  POP H
-  RET
+  JMP EEPROMrread8
 ```
 
 Resend I2C address of slave:
@@ -165,11 +149,7 @@ EEPROMrread4:
   JNC EEPROMrread5
   ;(error handling here)
   MVI E, 10000100B  ;errorcode for failed at address send
-  POP PSW
-  MOV A, E
-  POP D
-  POP H
-  RET
+  JMP EEPROMrread8
 ```
 
 Then read:
@@ -193,11 +173,7 @@ EEPROMrread5:
   JNC EEPROMrread6
   ;(error handling here)
   MVI E, 10000101B  ;errorcode for failed at memory address send
-  POP PSW
-  MOV A, E
-  POP D
-  POP H
-  RET
+  JMP EEPROMrread8
 ```
 
 Finally, we stop the communication:
@@ -210,11 +186,7 @@ EEPROMrread6:
   JNC EEPROMrread7
   ;(error handling here)
   MVI E, 10000110B  ;errorcode for failed at stop
-  POP PSW
-  MOV A, E
-  POP D
-  POP H
-  RET
+  JMP EEPROMrread8
 ```
 
 And if everything was good, we return 0:
@@ -222,6 +194,7 @@ And if everything was good, we return 0:
 ```assembly
 EEPROMrread7:
   MVI E, 00000000B  ;no error
+EEPROMrread8:
   POP PSW
   MOV A, E
   POP D

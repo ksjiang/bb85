@@ -157,8 +157,9 @@ Then read the bytestream:
 ```assembly
 EEPROMrread5:
   INX H
-  MOV E, M
-  PUSH D
+  INX H
+  MOV A, M
+  INX H
   INX H
   MOV E, M
   INX H

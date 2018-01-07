@@ -48,7 +48,7 @@ First create the header:
 
 ```assembly
 ;reads a byte of data from the 24AA64 EEPROM (1010XXXR)
-;input: data read address (1 byte on the stack), data store address (1 byte on the stack), EEPROM hardwired address (last 3 bits of 1 byte on the stack)
+;input: data store address (1 byte on the stack), data read address (1 byte on the stack, big-endian), EEPROM hardwired address (last 3 bits of 1 byte on the stack)
 ;output: none
 ;returns: errorcode (accumulator)
 ;size: ### bytes
@@ -114,7 +114,6 @@ Next we send the address of the memory we want to access:
 ```assembly
 EEPROMrread2:
   INX H
-  INX H
   PUSH H
   MVI A, 02H
   PUSH PSW
@@ -143,6 +142,53 @@ EEPROMrread3:
   JNC EEPROMrread4
   ;(error handling here)
   MVI E, 10000011B  ;errorcode for failed at repeated Start
+  POP PSW
+  POP PSW
+  MOV A, E
+  POP D
+  POP H
+  RET
+```
+
+Resend I2C address of slave:
+```assembly
+  POP PSW
+  ANI 11111110B     ;reading now
+  PUSH PSW
+  CALL i2cSendByte
+  POP PSW
+  LDAX D
+  RAL
+  JNC EEPROMrread2
+  ;(error handling here)
+  MVI E, 10000100B  ;errorcode for failed at address send
+  POP PSW
+  MOV A, E
+  POP D
+  POP H
+  RET
+```
+
+Then read:
+
+```assembly
+  INX H
+  INX H
+  MOV E, M
+  INX H
+  MOV D, M
+  PUSH D
+  MVI A, 01H        ;1 byte only
+  PUSH PSW
+  CALL i2cReadByteStream
+  POP PSW
+  POP D
+  LXI D, state
+  LDAX D
+  RAL
+  JNC EEPROMrread3
+  ;(error handling here)
+  MVI E, 10000101B  ;errorcode for failed at memory address send
   POP PSW
   POP PSW
   MOV A, E

@@ -122,7 +122,7 @@ i2cSetSDA:
 ;samples the I2C bus CLK line
 ;input: none
 ;output: none
-;returns: CLK reading, in the CY flag
+;returns: CLK reading (CY flag)
 ;size: 16 bytes
 i2cReadSCL:
 	PUSH PSW
@@ -143,7 +143,7 @@ i2cReadSCL1:
 ;samples the I2C bus DATA line
 ;input: none
 ;output: none
-;returns: DATA reading, in the CY flag
+;returns: DATA reading (CY flag)
 ;size: 17 bytes
 i2cReadSDA:
 	PUSH PSW
@@ -343,7 +343,7 @@ i2cStop3:
 	JMP i2cActionOkay
 
 ;send a bit over the I2C bus
-;input: bit to send, via the CY flag
+;input: bit to send (CY flag)
 ;output: none
 ;returns: none
 ;size: ### bytes
@@ -392,7 +392,7 @@ i2cSendBit5:
 ;read a bit on the I2C bus
 ;input: none
 ;output: none
-;returns: reading via the CY flag
+;returns: reading (CY flag)
 ;size: ### bytes
 i2cReadBit:
 	PUSH PSW

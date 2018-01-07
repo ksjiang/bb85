@@ -50,6 +50,8 @@ Creating extensions on top of BB85 is extremely easy (provided you know at least
 ;output: none
 ;returns: whether operation was successful (accumulator)
 ;size: ### bytes
+EEPROMwrite:
+  
 ```
 
 ## References and ACKnowledgements :)

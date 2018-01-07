@@ -42,15 +42,45 @@ All of the included functions, upon reaching an error in communication, will imm
 4. 110: NACKError (slave did not understand or was unable to process the data)
 
 ## Creating Extensions
-Creating extensions on top of BB85 is extremely easy (provided you know at least the fundamentals of assembly for the Intel processors). As an example, let us create a function that reads a byte of data from a random address of the [24AA64 64-KBit EEPROM](http://ww1.microchip.com/downloads/en/DeviceDoc/21189f.pdf).
+Creating extensions on top of BB85 is simple, provided you know at least the fundamentals of assembly for the Intel processors. As an example, let us create a function that reads a byte of data from a random address of the [24AA64 64-KBit EEPROM](http://ww1.microchip.com/downloads/en/DeviceDoc/21189f.pdf).
+
+First create the header:
 
 ```assembly
-;writes a byte of data to 24AA64 EEPROM
-;input: EEPROM hardwired address (1 byte on the stack), data store address (1 byte on the stack)
+;reads a byte of data from the 24AA64 EEPROM (1010XXXR)
+;input: data store address (1 byte on the stack), data read address (1 byte on the stack), EEPROM hardwired address (1 byte on the stack)
 ;output: none
 ;returns: whether operation was successful (accumulator)
 ;size: ### bytes
-EEPROMwrite:
+```
+
+We first save the registers we will be using (usually the last step, after the procedure has been written).
+```assembly
+
+```
+
+Next, we set up HL as a secondary stack pointer, pointing to our first argument.
+
+```assembly
+  
+```
+
+We begin communication by sending a Start condition and checking for errors.
+
+```assembly
+  LXI D, status
+  CALL i2cStart
+  LDAX D
+  RAL
+  JNC EEPROMrread1
+  ;(error handling here)
+  MVI B, 10000000B  ;errorcode for failed at Start
+  
+```
+
+Now we form the I2C address of the slave and send that.
+
+```assembly
   
 ```
 

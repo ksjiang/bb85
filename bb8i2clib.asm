@@ -562,7 +562,7 @@ i2cReadByteStream:
 	XCHG
 	LXI D, state
 i2cReadByteStream1:
-	STC			;send ACK
+	ORA A			;send ACK by clearing CY
 	DCR C
 	JNZ i2cReadByteStream2
 	CALL i2cReadByte
@@ -574,7 +574,7 @@ i2cReadByteStream1:
 	INX H
 	JNZ i2cReadByteStream1
 i2cReadByteStream2:
-	CMC			;don't send ACK
+	CMC			;send NACK
 	CALL i2cReadByte
 	MOV M, A		;don't need to error check (last op)
 i2cReadByteStream3:

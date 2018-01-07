@@ -50,7 +50,7 @@ First create the header:
 ;reads a byte of data from the 24AA64 EEPROM (1010XXXR)
 ;input: data read address (1 byte on the stack), data store address (1 byte on the stack), EEPROM hardwired address (last 3 bits of 1 byte on the stack)
 ;output: none
-;returns: whether operation was successful (accumulator)
+;returns: errorcode (accumulator)
 ;size: ### bytes
 ```
 
@@ -89,7 +89,24 @@ We begin communication by sending a Start condition and checking for errors.
 Now we form the I2C address of the slave and send that.
 
 ```assembly
-  
+EEPROMrread1:
+  MOV A, M
+  RLC
+  ANI 10101111B     ;set bitmasks
+  ORI 10100001B
+  PUSH PSW
+  CALL i2cSendByte
+  POP PSW
+  LDAX D
+  RAL
+  JNC EEPROMrread2
+  ;(error handling here)
+  MVI E, 10000001   ;errorcode for failed at address send
+  POP PSW
+  MOV A, E
+  POP D
+  POP H
+  RET
 ```
 
 ## References and ACKnowledgements :)

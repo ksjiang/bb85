@@ -148,7 +148,7 @@ EEPROMrread4:
   RAL
   JNC EEPROMrread5
   ;(error handling here)
-  MVI E, 10000100B  ;errorcode for failed at address send
+  MVI E, 10000001B  ;errorcode for failed at address send
   JMP EEPROMrread8
 ```
 
@@ -172,7 +172,7 @@ EEPROMrread5:
   RAL
   JNC EEPROMrread6
   ;(error handling here)
-  MVI E, 10000101B  ;errorcode for failed at memory address send
+  MVI E, 10000100B  ;errorcode for failed at data read
   JMP EEPROMrread8
 ```
 
@@ -185,7 +185,7 @@ EEPROMrread6:
   RAL
   JNC EEPROMrread7
   ;(error handling here)
-  MVI E, 10000110B  ;errorcode for failed at stop
+  MVI E, 10000101B  ;errorcode for failed at stop
   JMP EEPROMrread8
 ```
 

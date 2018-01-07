@@ -123,9 +123,27 @@ EEPROMrread2:
   POP H
   LDAX D
   RAL
-  JNC i2cSendByte3
+  JNC EEPROMrread3
   ;(error handling here)
   MVI E, 10000010B  ;errorcode for failed at memory address send
+  POP PSW
+  POP PSW
+  MOV A, E
+  POP D
+  POP H
+  RET
+```
+
+We send a repeated start:
+```assembly
+EEPROMrread3:
+  LXI D, status
+  CALL i2cStart
+  LDAX D
+  RAL
+  JNC EEPROMrread4
+  ;(error handling here)
+  MVI E, 10000011B  ;errorcode for failed at repeated Start
   POP PSW
   POP PSW
   MOV A, E

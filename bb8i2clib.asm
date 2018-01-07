@@ -11,13 +11,13 @@
 
 rombase EQU 0000H
 rambase EQU 8000H
-stkbase EQU 83FFH	;bottom of stack @ top of RAM
+stkbase EQU 83FFH		;bottom of stack @ top of RAM
 
 inputport EQU 00H
 ledctrlport EQU 01H
 
-stddelay EQU 02H	;call delay with this to delay 51us
-wdtimeout EQU 8000H	;cycles before timeout (clock stretching)
+stddelay EQU 02H		;call delay with this to delay 51us
+wdtimeout EQU 8000H		;cycles before timeout (clock stretching)
 
 ; SECTION 2: Data Definitions
 ; Values and labels to be loaded into memory.
@@ -55,7 +55,7 @@ delay1:
 	JNZ delay1		;total 14X + 44 states
 	POP PSW
 	POP H
-	RET				;total 14X + 74 states
+	RET			;total 14X + 74 states
 
 ;pulls the I2C bus CLK line low
 ;input: none
@@ -67,7 +67,7 @@ i2cClearSCL:
 	PUSH PSW
 	LXI H, state
 	MOV A, M
-	ORI 00000100B	;pull CLK low by setting A[2] = 1
+	ORI 00000100B		;pull CLK low by setting A[2] = 1
 	MOV M, A
 	OUT ledctrlport
 	POP PSW
@@ -84,7 +84,7 @@ i2cSetSCL:
 	PUSH PSW
 	LXI H, state
 	MOV A, M
-	ANI 11111011B	;release CLK by setting A[2] = 0
+	ANI 11111011B		;release CLK by setting A[2] = 0
 	MOV M, A
 	OUT ledctrlport
 	POP PSW
@@ -101,7 +101,7 @@ i2cClearSDA:
 	PUSH PSW
 	LXI H, state
 	MOV A, M
-	ORI 00001000B	;pull DATA low by setting A[3] = 1
+	ORI 00001000B		;pull DATA low by setting A[3] = 1
 	MOV M, A
 	OUT ledctrlport
 	POP PSW
@@ -118,7 +118,7 @@ i2cSetSDA:
 	PUSH PSW
 	LXI H, state
 	MOV A, M
-	ANI 11110111B	;release DATA by setting A[3] = 0
+	ANI 11110111B		;release DATA by setting A[3] = 0
 	MOV M, A
 	OUT ledctrlport
 	POP PSW
@@ -178,7 +178,7 @@ i2cActionOkay:
 	PUSH PSW
 	LXI H, state
 	MOV A, M
-	ANI 00011111B	;noerr
+	ANI 00011111B		;noerr
 	MOV M, A
 	POP PSW
 	POP H
@@ -196,7 +196,7 @@ i2cTimeoutErr:
 	CALL i2cSetSDA
 	LXI H, state
 	MOV A, M
-	ANI 10011111B	;errcode 00: TIMEOUT
+	ANI 10011111B		;errcode 00: TIMEOUT
 	ORI 10000000B
 	MOV M, A
 	LXI H, started
@@ -217,7 +217,7 @@ i2cArbLostErr:
 	CALL i2cSetSDA
 	LXI H, state
 	MOV A, M
-	ANI 10111111B	;errcode 01: ARBLOST (arbitration lost)
+	ANI 10111111B		;errcode 01: ARBLOST (arbitration lost)
 	ORI 10100000B
 	MOV M, A
 	LXI H, started
@@ -238,7 +238,7 @@ i2cNACKErr:
 	CALL i2cSetSDA
 	LXI H, state
 	MOV A, M
-	ANI 11011111B	;errcode 10: NACK (no acknowledge)
+	ANI 11011111B		;errcode 10: NACK (no acknowledge)
 	ORI 11000000B
 	MOV M, A
 	LXI H, started
@@ -256,7 +256,7 @@ i2cStart:
 	PUSH H
 	PUSH PSW
 	PUSH B
-	LXI H, started	;check if com has already started
+	LXI H, started		;check if com has already started
 	MOV A, M
 	ORA A
 	JZ i2cStart3
@@ -313,7 +313,7 @@ i2cStop:
 	PUSH B
 	PUSH H
 	CALL i2cClearSDA
-	MVI A, stddelay	;delay 51us
+	MVI A, stddelay		;delay 51us
 	PUSH PSW
 	CALL delay
 	CALL i2cSetSCL
@@ -466,7 +466,7 @@ i2cSendByte2:
 	MOV A, B		;restore byte
 	DCR C
 	JNZ i2cSendByte1
-	CALL i2cReadBit	;byte send complete, check for ACK
+	CALL i2cReadBit		;byte send complete, check for ACK
 	POP B
 	JNC i2cSendByte3
 	POP PSW

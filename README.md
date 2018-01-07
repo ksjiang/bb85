@@ -106,6 +106,7 @@ Next we send the address of the memory we want to access as a bytestream:
 ```assembly
 EEPROMrread2:
   INX H
+  INX H
   PUSH H
   MVI A, 02H
   PUSH PSW

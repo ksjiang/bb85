@@ -31,7 +31,7 @@ BB85 contains full functionality for the Intel 8085 to serve as an I2C master. N
 
 ### Functions at the Bytestream Level
 11. Send Byte Stream (argc, \*bytes): i2cSendByteStream
-12. Read Byte Stream (argc, \*bytes): i2cReadByteStream
+12. Read Byte Stream (argc, \*bytesToStore): i2cReadByteStream
 
 ## Error Handling
 All of the included functions, upon reaching an error in communication, will immediately quit the communication, set the most significant bit of the STATE global variable, and write an error code to bits 6 and 5 of STATE. The possible combinations of STATE[7:5] after an operation are:

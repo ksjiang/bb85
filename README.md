@@ -92,16 +92,41 @@ Now we form the I2C address of the slave and send that.
 EEPROMrread1:
   MOV A, M
   RLC
-  ANI 10101111B     ;set bitmasks
-  ORI 10100001B
+  ANI 10101110B     ;set bitmasks
+  ORI 10100000B
   PUSH PSW
   CALL i2cSendByte
-  POP PSW
-  LDAX D
+  LDAX D            ;we don't POP PSW yet because we will reuse
   RAL
   JNC EEPROMrread2
   ;(error handling here)
-  MVI E, 10000001   ;errorcode for failed at address send
+  MVI E, 10000001B  ;errorcode for failed at address send
+  POP PSW
+  POP PSW
+  MOV A, E
+  POP D
+  POP H
+  RET
+```
+
+Next we send the address of the memory we want to access.
+
+```assembly
+EEPROMrread2:
+  INX H
+  INX H
+  PUSH H
+  MVI A, 02H
+  PUSH PSW
+  CALL i2cSendByteStream
+  POP PSW
+  POP H
+  LDAX D
+  RAL
+  JNC i2cSendByte3
+  ;(error handling here)
+  MVI E, 10000010B  ;errorcode for failed at memory address send
+  POP PSW
   POP PSW
   MOV A, E
   POP D

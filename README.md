@@ -166,7 +166,6 @@ EEPROMrread5:
   INX H
   MOV D, M
   PUSH D
-  MVI A, 01H        ;1 byte only
   PUSH PSW
   CALL i2cReadByteStream
   POP PSW

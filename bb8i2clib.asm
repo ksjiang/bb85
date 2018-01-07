@@ -33,8 +33,7 @@ started:
 ; SECTION 3: Programs
 
 .ORG rombase
-	;initialization
-	LXI SP, stkbase
+	LXI SP, stkbase		;initialization
 	;(program code here)
 	HLT
 
@@ -265,9 +264,8 @@ i2cStart:
 	PUSH PSW
 	CALL delay
 	CALL i2cSetSCL
-	;implemented clock-stretching
 	LXI B, wdtimeout	;timeout
-i2cStart1:
+i2cStart1:			;implemented clock-stretching
 	CALL i2cReadSCL
 	JC i2cStart2
 	DCX B

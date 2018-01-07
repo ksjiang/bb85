@@ -130,7 +130,7 @@ EEPROMrread3:
   RAL
   JNC EEPROMrread4
   ;(error handling here)
-  MVI E, 10000011B  ;errorcode for failed at repeated Start
+  MVI E, 10000000B  ;errorcode for failed at repeated Start
   POP PSW
   JMP EEPROMrread8
 ```
@@ -172,7 +172,7 @@ EEPROMrread5:
   RAL
   JNC EEPROMrread6
   ;(error handling here)
-  MVI E, 10000100B  ;errorcode for failed at data read
+  MVI E, 10000011B  ;errorcode for failed at data read
   JMP EEPROMrread8
 ```
 
@@ -185,7 +185,7 @@ EEPROMrread6:
   RAL
   JNC EEPROMrread7
   ;(error handling here)
-  MVI E, 10000101B  ;errorcode for failed at stop
+  MVI E, 10000100B  ;errorcode for failed at stop
   JMP EEPROMrread8
 ```
 

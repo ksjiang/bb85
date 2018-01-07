@@ -134,6 +134,7 @@ EEPROMrread2:
 ```
 
 We send a repeated start:
+
 ```assembly
 EEPROMrread3:
   CALL i2cStart
@@ -151,6 +152,7 @@ EEPROMrread3:
 ```
 
 Resend I2C address of slave:
+
 ```assembly
 EEPROMrread4:
   POP PSW
@@ -188,10 +190,38 @@ EEPROMrread5:
   LXI D, state
   LDAX D
   RAL
-  JNC EEPROMrread3
+  JNC EEPROMrread6
   ;(error handling here)
   MVI E, 10000101B  ;errorcode for failed at memory address send
   POP PSW
+  MOV A, E
+  POP D
+  POP H
+  RET
+```
+
+Finally, we stop the communication:
+
+```assembly
+EEPROMrread6:
+  CALL i2cStop
+  LDAX D
+  RAL
+  JNC EEPROMrread7
+  ;(error handling here)
+  MVI E, 10000110B  ;errorcode for failed at stop
+  POP PSW
+  MOV A, E
+  POP D
+  POP H
+  RET
+```
+
+And if everything was good, we return 0:
+
+```assembly
+EEPROMrread7:
+  MVI E, 00000000B  ;no error
   POP PSW
   MOV A, E
   POP D

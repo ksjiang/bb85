@@ -72,7 +72,7 @@ Next, we set up HL as a secondary stack pointer, pointing to our first argument 
 We begin communication by sending a Start condition and checking for errors:
 
 ```assembly
-  LXI D, status
+  LXI D, state
   CALL i2cStart
   LDAX D
   RAL

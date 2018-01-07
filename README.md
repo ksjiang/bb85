@@ -152,6 +152,7 @@ EEPROMrread3:
 
 Resend I2C address of slave:
 ```assembly
+EEPROMrread4:
   POP PSW
   ANI 11111110B     ;reading now
   PUSH PSW
@@ -159,7 +160,7 @@ Resend I2C address of slave:
   POP PSW
   LDAX D
   RAL
-  JNC EEPROMrread2
+  JNC EEPROMrread5
   ;(error handling here)
   MVI E, 10000100B  ;errorcode for failed at address send
   POP PSW
@@ -172,6 +173,7 @@ Resend I2C address of slave:
 Then read:
 
 ```assembly
+EEPROMrread5:
   INX H
   INX H
   MOV E, M

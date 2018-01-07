@@ -137,7 +137,6 @@ EEPROMrread2:
 We send a repeated start:
 ```assembly
 EEPROMrread3:
-  LXI D, status
   CALL i2cStart
   LDAX D
   RAL

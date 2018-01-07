@@ -51,6 +51,6 @@ Creating extensions on top of BB85 is extremely easy (provided you know at least
 ```
 
 ## References and ACKnowledgements :)
-1. Mr. Hassman for basically everything
+1. Mr. Hassman - thank you for all the hardware and support.
 2. [Understanding the I2C Bus](http://www.ti.com/lit/an/slva704/slva704.pdf) (Texas Instruments)
 3. [8080 / 8085 Assembly Language Programming](https://www.tramm.li/i8080/Intel%208080-8085%20Assembly%20Language%20Programming%201977%20Intel.pdf) (Intel)

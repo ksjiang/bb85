@@ -202,6 +202,8 @@ EEPROMrread8:
   RET
 ```
 
+Notice that we could have implmented EEPROMrread5 as a simple i2cReadByte, but in this situation we would have to worry about setting NACK (something that was abstracted away by i2cReadByteStream.
+
 ## References and ACKnowledgements :)
 1. Mr. Hassman - thank you for all the hardware and support.
 2. [Understanding the I2C Bus](http://www.ti.com/lit/an/slva704/slva704.pdf) (Texas Instruments)

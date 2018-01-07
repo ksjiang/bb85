@@ -42,10 +42,12 @@ All of the included functions, upon reaching an error in communication, will imm
 4. 110: NACKError (slave did not understand or was unable to process the data)
 
 ## Creating Extensions
-Creating extensions on top of BB85 is extremely easy (provided you know at least the fundamentals of assembly for the Intel processors). As an example, let us create a function that writes a byte of data to an address of the [24AA64 64-KBit EEPROM](http://ww1.microchip.com/downloads/en/DeviceDoc/21189f.pdf).
+Creating extensions on top of BB85 is extremely easy (provided you know at least the fundamentals of assembly for the Intel processors). As an example, let us create a function that reads a byte of data from a random address of the [24AA64 64-KBit EEPROM](http://ww1.microchip.com/downloads/en/DeviceDoc/21189f.pdf).
 
 ```assembly
-
+;writes a byte of data to 24AA64 EEPROM
+;input: EEPROM hardwired address (1 byte on the stack), address to store data to
+;
 ```
 
 ## References and ACKnowledgements :)

@@ -2,6 +2,7 @@
 ;* 8085 I2C Library                                             *
 ;* Description: A collection of system routines for I2C master  *
 ;communication                                                  *
+;* Author: Kyle Jiang                                           *
 ;* Date: January 1, 2018                                        *
 ;****************************************************************
 

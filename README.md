@@ -54,7 +54,7 @@ First create the header:
 ;size: ### bytes
 ```
 
-We first save the registers we will be using (usually the last step, after the procedure has been written).
+We first save the registers we will be using (usually the last step, after the procedure has been written):
 ```assembly
 EEPROMrread:
   PUSH H
@@ -62,14 +62,14 @@ EEPROMrread:
   PUSH PSW
 ```
 
-Next, we set up HL as a secondary stack pointer, pointing to our first argument (the EEPROM hardwired address).
+Next, we set up HL as a secondary stack pointer, pointing to our first argument (the EEPROM hardwired address):
 
 ```assembly
   LXI H, 0009H
   DAD SP
 ```
 
-We begin communication by sending a Start condition and checking for errors.
+We begin communication by sending a Start condition and checking for errors:
 
 ```assembly
   LXI D, status
@@ -86,7 +86,7 @@ We begin communication by sending a Start condition and checking for errors.
   RET
 ```
 
-Now we form the I2C address of the slave and send that.
+Now we form the I2C address of the slave and send that:
 
 ```assembly
 EEPROMrread1:
@@ -109,7 +109,7 @@ EEPROMrread1:
   RET
 ```
 
-Next we send the address of the memory we want to access.
+Next we send the address of the memory we want to access:
 
 ```assembly
 EEPROMrread2:

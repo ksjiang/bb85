@@ -42,7 +42,7 @@ All of the included functions, upon reaching an error in communication, will imm
 4. 110: NACKError (slave did not understand or was unable to process the data)
 
 ## Creating Extensions
-Writing extensions on top of BB85 allows for simpler interfacing with specific I2C devices, but does require some knowledge of Intel assembly programming. To create effective extensions, use i2cSendByte to send 7-bit mode slave addresses and i2cSendByteStream to send 10-bit slave addresses and device-specific addresses and data. As an example, let us create a function that reads a byte of data from a random address of the [24AA64 64-KBit EEPROM](http://ww1.microchip.com/downloads/en/DeviceDoc/21189f.pdf).
+Writing extensions on top of BB85 allows for simpler interfacing with specific I2C devices, but does require some knowledge of Intel assembly programming. To create effective extensions, use i2cSendByte to send 7-bit mode slave addresses and i2cSendByteStream to send 10-bit slave addresses and device-specific addresses and data. As an example, let us create a function that reads a byte of data from a random address of the [24AA64 64-KBit EEPROM](http://ww1.microchip.com/downloads/en/DeviceDoc/21189f.pdf) and stores it somewhere in its own RAM.
 
 First create the header:
 

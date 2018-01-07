@@ -564,7 +564,7 @@ i2cReadByteStream:
 i2cReadByteStream1:
 	ORA A			;send ACK by clearing CY
 	DCR C
-	JNZ i2cReadByteStream2
+	JZ i2cReadByteStream2
 	CALL i2cReadByte
 	MOV B, A		;save received data before error check
 	LDAX D
@@ -572,7 +572,7 @@ i2cReadByteStream1:
 	JC i2cReadByteStream3	;error
 	MOV M, B
 	INX H
-	JNZ i2cReadByteStream1
+	JMP i2cReadByteStream1
 i2cReadByteStream2:
 	CMC			;send NACK
 	CALL i2cReadByte

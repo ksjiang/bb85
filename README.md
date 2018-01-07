@@ -46,8 +46,10 @@ Creating extensions on top of BB85 is extremely easy (provided you know at least
 
 ```assembly
 ;writes a byte of data to 24AA64 EEPROM
-;input: EEPROM hardwired address (1 byte on the stack), address to store data to
-;
+;input: EEPROM hardwired address (1 byte on the stack), data store address (1 byte on the stack)
+;output: none
+;returns: whether operation was successful (accumulator)
+;size: ### bytes
 ```
 
 ## References and ACKnowledgements :)
